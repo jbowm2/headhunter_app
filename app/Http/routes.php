@@ -26,3 +26,9 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 // Applicant Interface Routes
 Route::get('home', 'PagesController@home');
+
+//Profile routes...
+Route::resource('profile', 'ProfilesController');
+
+//Resume routes...
+Route::resource('resume', 'ResumesController');

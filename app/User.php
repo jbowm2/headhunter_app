@@ -10,9 +10,12 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Model implements AuthenticatableContract,
-                                    AuthorizableContract,
-                                    CanResetPasswordContract
+class User extends Model implements
+
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
+
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
@@ -36,4 +39,33 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    public function profile()
+    {
+        return $this->hasOne('App\Profile');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role')->withTimestamps();
+    }
+
+    public function hasRole($name)
+    {
+        foreach ($this->roles as $role)
+        {
+            if($role->name == $name) return true;
+        }
+        return false;
+    }
+
+    public function assignRole($role)
+    {
+        $this->roles()->attach($role);
+    }
+
+    public function resumes()
+    {
+        return $this->hasMany('App\Resume');
+    }
 }

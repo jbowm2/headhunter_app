@@ -11,8 +11,12 @@ class PagesController extends Controller
 {
     public function home()
     {
-        if(Auth::check()) {
-            return view('pages.home');
+        $user = Auth::user();
+        if(Auth::user()->hasRole('applicant')) {
+            return view('pages.applicant-dashboard', compact('user'));
+        }
+        elseif (Auth::user()->hasRole('restaurant')){
+            return view('pages.home', compact('user'));
         }
         else
             return redirect('auth/login');
